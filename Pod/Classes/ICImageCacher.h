@@ -10,8 +10,15 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+typedef enum {
+    ICCacheSourceMemory     = 0,
+    ICCacheSourceCoreData   = 1,
+    ICCacheSourceWeb        = 2,
+    ICCacheSourceUndefined  = 99
+} tICCacheSource;
+
 // completion handlers
-typedef void (^DCModel_imageCompletionHandler)(UIImage *image);
+typedef void (^DCModel_imageCompletionHandler)(UIImage *image, tICCacheSource source);
 typedef void (^DCModel_cleanCacheCompletionHandler)(BOOL success);
 
 // Class
@@ -24,8 +31,8 @@ typedef void (^DCModel_cleanCacheCompletionHandler)(BOOL success);
 -(NSString *)getChacheSize;
 
 -(void)cleanImageCache;
--(UIImage *)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler;
--(UIImage *)getThumbnailForVideoWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler;
+-(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler;
+-(void)getThumbnailForVideoWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler;
 -(void)fetchImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler;
 -(BOOL)saveImage:(UIImage *)image withURL:(NSString *)imageURL;
 -(void)deleteImageWithURL:(NSString *)imageURL;

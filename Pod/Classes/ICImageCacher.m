@@ -224,19 +224,18 @@ static ICImageCacher    *shared_ICImageCacher;
     [self.imagesURLCache removeAllObjects];
 }
 
--(UIImage *)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
+-(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
     
     // IMAGES HAVE ALSO TO BE FETCHED FROM THE PERSISTENT CACHE
     UIImage *image = self.imagesURLCache[imageURL];
     if (image) {
-        return image;
+        handler(image, ICCacheSourceMemory);
     } else {
         // check if image is caching, if yes then queue the callback
         NSMutableArray *callbacks = self.callbacksForImageCaching[imageURL];
         if (callbacks) {
             // image is caching now, queue the handler
             [callbacks addObject:handler];
-            return nil;
         } else {
             // image is not caching, create the handler queue
             callbacks = [NSMutableArray array];
@@ -245,7 +244,7 @@ static ICImageCacher    *shared_ICImageCacher;
         }
         
         // fetch from CoreData in background
-        [self fetchImageWithURL:imageURL withCompletionHandler:^(UIImage *image) {
+        [self fetchImageWithURL:imageURL withCompletionHandler:^(UIImage *image, tICCacheSource source) {
             
             if (image) {
                 // image fetched from coredata
@@ -254,7 +253,7 @@ static ICImageCacher    *shared_ICImageCacher;
                 
                 // process the handler queue
                 for (DCModel_imageCompletionHandler queuedHandler in self.callbacksForImageCaching[imageURL]) {
-                    queuedHandler(image);
+                    queuedHandler(image ,source);
                 }
                 [self.callbacksForImageCaching removeObjectForKey:imageURL];
             } else {
@@ -272,14 +271,14 @@ static ICImageCacher    *shared_ICImageCacher;
                             
                             // call the callbacks queued for this image URL
                             for (DCModel_imageCompletionHandler queuedHandler in self.callbacksForImageCaching[imageURL]) {
-                                queuedHandler(downloadedImage);
+                                queuedHandler(downloadedImage, ICCacheSourceWeb);
                             }
                             [self.callbacksForImageCaching removeObjectForKey:imageURL];
                             
                         } else {
                             // no image in cache for this url and I was not able to download it. failed.
                             for (DCModel_imageCompletionHandler queuedHandler in self.callbacksForImageCaching[imageURL]) {
-                                queuedHandler(nil);
+                                queuedHandler(nil, ICCacheSourceUndefined);
                             }
                             [self.callbacksForImageCaching removeObjectForKey:imageURL];
                         }
@@ -288,8 +287,6 @@ static ICImageCacher    *shared_ICImageCacher;
             }
         }];
     }
-    
-    return nil;
 }
 
 -(void)fetchImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
@@ -310,40 +307,40 @@ static ICImageCacher    *shared_ICImageCacher;
                 UIImage *img = [UIImage imageWithData:cachedImage.image];
                 if (img) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        handler(img);
+                        handler(img, ICCacheSourceCoreData);
                     });
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        handler(nil);
+                        handler(nil, ICCacheSourceUndefined);
                     });
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    handler(nil);
+                    handler(nil, ICCacheSourceUndefined);
                 });
             }
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                handler(nil);
+                handler(nil, ICCacheSourceUndefined);
             });
         }
     }];
 };
 
--(UIImage *)getThumbnailForVideoWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
+-(void)getThumbnailForVideoWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
     // IMAGES HAVE ALSO TO BE FETCHED FROM THE PERSISTENT CACHE
     UIImage *image = self.imagesURLCache[imageURL];
     if (image) {
-        return image;
+        handler (image, ICCacheSourceMemory);
     } else {
         // fetch from CoreData in background
-        [self fetchImageWithURL:imageURL withCompletionHandler:^(UIImage *image) {
+        [self fetchImageWithURL:imageURL withCompletionHandler:^(UIImage *image, tICCacheSource source) {
             
             if (image) {
                 // image fetched from coredata
                 self.imagesURLCache[imageURL] = image;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    handler(image);
+                    handler(image, source);
                 });
             } else {
                 // fetch image from the URL
@@ -371,17 +368,15 @@ static ICImageCacher    *shared_ICImageCacher;
                             self.imagesURLCache[imageURL] = thumbnail;
                             [self updateLastAccessedURLs:imageURL];
                             
-                            handler(thumbnail);
+                            handler(thumbnail, ICCacheSourceWeb);
                         } else {
-                            handler(nil);
+                            handler(nil, ICCacheSourceUndefined);
                         }
                     });
                 });
             }
         }];
     }
-    
-    return nil;
 }
 
 -(BOOL)saveImage:(UIImage *)image withURL:(NSString *)imageURL {
