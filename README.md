@@ -7,7 +7,18 @@
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+ImageCacher helps you to cache web images from a given URL using CoreData framework and memory LAFO (Last Accessed First Out) memory queue strategy for memory caching. The basic operation is to get an image from an URL:
+
+    UIImage *image = [[ICImageChacher] getImageWithURL:<my url> withCompletionHandler^(UIImage *image) {
+        // image cached from memory or coredata
+        if (image) {
+            // do something with the fetched image
+        }
+    }];
+    // check if image was cached in memory and immediatly returned
+    if (image) {
+        // image was cached in memory, the completion block will not be invoked, use the image here
+    }
 
 ## Requirements
 
