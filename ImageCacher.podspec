@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
     'ImageCacher' => ['Pod/Assets/*.png', 'Pod/Assets/*.xcdatamodel']
   }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'MapKit', 'AVFoundation'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
