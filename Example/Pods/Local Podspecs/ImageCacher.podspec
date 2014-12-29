@@ -10,15 +10,18 @@
 Pod::Spec.new do |s|
   s.name             = "ImageCacher"
   s.version          = "0.1.0"
-  s.summary          = "ImageCacher helps you to manage image caching."
+  s.summary          = "A short description of ImageCacher."
   s.description      = <<-DESC
-                        The image caching is asynchronous and based on blocks and GCD. The persistent storage is based on CoreData, fetches are executed in background, last accessed images are stored into a memory buffer.
+                       An optional longer description of ImageCacher
+
+                       * Markdown format.
+                       * Don't worry about the indent, we strip it!
                        DESC
-  s.homepage         = "https://github.com/robyxz/ImageCacher"
+  s.homepage         = "https://github.com/<GITHUB_USERNAME>/ImageCacher"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "Roberto Sartori" => "roberto@rawfish.it" }
-  s.source           = { :git => "https://github.com/robyxz/ImageCacher.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/ImageCacher.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '7.0'
@@ -26,10 +29,10 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes'
   s.resource_bundles = {
-    'ImageCacher' => ['Pod/Assets/*.png', 'Pod/Assets/*.xcdatamodel']
+    'ImageCacher' => ['Pod/Assets/*.png']
   }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'MapKit', 'AVFoundation'
+  # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
