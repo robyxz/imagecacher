@@ -70,7 +70,7 @@ static ICImageCacher    *shared_ICImageCacher;
     
     NSString *bpath = [[NSBundle mainBundle] pathForResource:@"ImageCacher" ofType:@"bundle"];
     NSBundle *imageCacherBundle = [NSBundle bundleWithPath:bpath];
-    NSURL *modelURL = [imageCacherBundle URLForResource:@"ICImageCacher" withExtension:@"momd"];
+    NSURL *modelURL = [imageCacherBundle URLForResource:@"ICImageCacher" withExtension:@"mom"];
     
     self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
