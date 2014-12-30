@@ -16,20 +16,26 @@ ImageCacher strategy is straightforward: you ask for an image by specifying its 
  * otherwise download the image from the URL, save it to the caching database and will call the handler with source = ICCacheSourceWeb
  * if URL is invalid or a fatal error occurs the handler il called with source = ICCacheSourceUnknown
 
-The 
+The common usage pattern is the following:
 ```objective-c
-    [[ICImageChacher hared] getImageWithURL:<myurl> withCompletionHandler^(UIImage *image ,tICCacheSource source) {
+    [[ICImageCacher hared] getImageWithURL:<myurl> withCompletionHandler^(UIImage *image ,tICCacheSource source) {
         switch (source) {
-        case ICCacheMemory:
-            // image has been found into memory, handler is called WITHIN the selector execution
+        case ICCacheSourceMemory:
+            // image has been found into memory, this block is called WITHIN getImageWithURL execution
             break;
 
-        case ICCacheLocal:
-            // image has been found into local caching database
+        case ICCacheSourceLocal:
+            // image has been found into local caching database, this block is called later
             break;
 
-        case ICCacheWeb:
-            // image has been downloaded for the first time, next time this url will be fetched from memory or from local cache
+        case ICCacheSourceWeb:
+            // image has been downloaded for the first time, , this block is called later.
+            // Next time this url will be fetched from memory or from local cache
+            break;
+
+        case ICCacheSourceUnknown:
+            // image not found ad not downloaded (an error should has been encountered)
+            break;
         }
     }];
 ```
