@@ -9,27 +9,33 @@
 
 ImageCacher helps you to easily cache web images from a given URL using [Core Data](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreData/cdProgrammingGuide.html) as persistent storage framework, [GCD](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/) for background fetching and [blocks](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Blocks/Articles/00_Introduction.html) for asynch operations.
 
-ImageCacher strategy is straightforward: you ask for an image given its URL, the singleton class will then:
+ImageCacher strategy is straightforward: you ask for an image by specifying its URL, the singleton class then:
 
- * search the image into an internal memory queue as first attempt, it will return the image immediatly in case of success
- * fetch the image in background form the persistent caching database, it will return the image in a completion block in case of success
- * download the image from the URL, save it to the persistent caching database and will return the image in a completion block
+ * search the image into an internal memory structure as first attempt, it will call the handler immediatly before return with source = ICCacheSourceMemory
+ * otherwise it will try to fetch the image in background form the caching database, it will call the handler in case of success at the end of the fetching operation (executed in background) with source = ICCacheSourceLocal
+ * otherwise download the image from the URL, save it to the caching database and will call the handler with source = ICCacheSourceWeb
+ * if URL is invalid or a fatal error occurs the handler il called with source = ICCacheSourceUnknown
 
 The 
 ```objective-c
-    UIImage *image = [[ICImageChacher hared] getImageWithURL:<my url> withCompletionHandler^(UIImage *image) {
-        // image cached from memory or coredata
-        if (image) {
-            // do something with the fetched image
+    [[ICImageChacher hared] getImageWithURL:<myurl> withCompletionHandler^(UIImage *image ,tICCacheSource source) {
+        switch (source) {
+        case ICCacheMemory:
+            // image has been found into memory, handler is called WITHIN the selector execution
+            break;
+
+        case ICCacheLocal:
+            // image has been found into local caching database
+            break;
+
+        case ICCacheWeb:
+            // image has been downloaded for the first time, next time this url will be fetched from memory or from local cache
         }
     }];
-    // check if image was cached in memory and immediatly returned
-    if (image) {
-        // image was cached in memory, the completion block will not be invoked, use the image here
-    }
 ```
 
 ## Requirements
+
 
 ## Installation
 

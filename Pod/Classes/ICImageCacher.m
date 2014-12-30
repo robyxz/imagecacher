@@ -312,7 +312,7 @@ static ICImageCacher    *shared_ICImageCacher;
                 UIImage *img = [UIImage imageWithData:cachedImage.image];
                 if (img) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        handler(img, ICCacheSourceCoreData);
+                        handler(img, ICCacheSourceLocal);
                     });
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{

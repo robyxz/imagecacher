@@ -12,7 +12,7 @@
 
 typedef enum {
     ICCacheSourceMemory     = 0,
-    ICCacheSourceCoreData   = 1,
+    ICCacheSourceLocal      = 1,
     ICCacheSourceWeb        = 2,
     ICCacheSourceUndefined  = 99
 } tICCacheSource;
