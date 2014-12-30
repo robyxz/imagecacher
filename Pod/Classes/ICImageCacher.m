@@ -68,7 +68,9 @@ static ICImageCacher    *shared_ICImageCacher;
     self.persistentString       = [NSString stringWithFormat:@"%@.sqlite", @"ICImageCacher"];
     self.persistentURL          = [documentDirectoryURL URLByAppendingPathComponent:self.persistentString];
     
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"ICImageCacher" withExtension:@"momd"];
+    NSString *bpath = [[NSBundle mainBundle] pathForResource:@"ImageCacher" ofType:@"bundle"];
+    NSBundle *imageCacherBundle = [NSBundle bundleWithPath:bpath];
+    NSURL *modelURL = [imageCacherBundle URLForResource:@"ICImageCacher" withExtension:@"momd"];
     
     self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
