@@ -87,7 +87,7 @@
 		9AE072631A520782001A67C8 /* AVAssetTrack+VideoOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE072611A520782001A67C8 /* AVAssetTrack+VideoOrientation.m */; };
 		9AE072661A520793001A67C8 /* ICCachedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE072651A520793001A67C8 /* ICCachedImage.m */; };
 		9AE072691A52079A001A67C8 /* ICImageCacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE072681A52079A001A67C8 /* ICImageCacher.m */; };
-		9AE0726B1A5207AB001A67C8 /* ICImageCacherModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9AE0726A1A5207AB001A67C8 /* ICImageCacherModel.xcdatamodel */; };
+		9AE0726B1A5207AB001A67C8 /* ICImageCacher.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9AE0726A1A5207AB001A67C8 /* ICImageCacher.xcdatamodel */; };
 		9B2B3F5EED3769E58C23B6FD /* EXPMatchers+beginWith.m in Sources */ = {isa = PBXBuildFile; fileRef = 6544F03FA817421EED2FA91E /* EXPMatchers+beginWith.m */; };
 		9F53B718388EB019F8F5C0D3 /* EXPMatchers+raiseWithReason.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CF1F7A1E6EE4552E60594A4 /* EXPMatchers+raiseWithReason.m */; };
 		A0BBE79DC48D7FE2F633F5F9 /* EXPBackwardCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = E79B508F49B6106BF7B5061E /* EXPBackwardCompatibility.h */; };
@@ -321,7 +321,7 @@
 		9AE072651A520793001A67C8 /* ICCachedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ICCachedImage.m; path = Pod/Classes/ICCachedImage.m; sourceTree = "<group>"; };
 		9AE072671A52079A001A67C8 /* ICImageCacher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ICImageCacher.h; path = Pod/Classes/ICImageCacher.h; sourceTree = "<group>"; };
 		9AE072681A52079A001A67C8 /* ICImageCacher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ICImageCacher.m; path = Pod/Classes/ICImageCacher.m; sourceTree = "<group>"; };
-		9AE0726A1A5207AB001A67C8 /* ICImageCacherModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = ICImageCacherModel.xcdatamodel; path = Pod/Assets/ICImageCacherModel.xcdatamodel; sourceTree = "<group>"; };
+		9AE0726A1A5207AB001A67C8 /* ICImageCacher.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = ICImageCacher.xcdatamodel; path = Pod/Assets/ICImageCacher.xcdatamodel; sourceTree = "<group>"; };
 		9C5898C479BE6F90B90EBD32 /* Pods-Tests-Expecta-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Tests-Expecta-prefix.pch"; sourceTree = "<group>"; };
 		9C95477C50909C7F830A3D03 /* UIImage+Diff.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Diff.m"; sourceTree = "<group>"; };
 		9D1A7C00D172438FDEA9944B /* SpectaUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectaUtility.m; path = src/SpectaUtility.m; sourceTree = "<group>"; };
@@ -694,7 +694,7 @@
 		9AE0725B1A520749001A67C8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9AE0726A1A5207AB001A67C8 /* ICImageCacherModel.xcdatamodel */,
+				9AE0726A1A5207AB001A67C8 /* ICImageCacher.xcdatamodel */,
 				9AE072641A520793001A67C8 /* ICCachedImage.h */,
 				9AE072651A520793001A67C8 /* ICCachedImage.m */,
 			);
@@ -1225,7 +1225,7 @@
 			files = (
 				9AE072621A520782001A67C8 /* AVAsset+Thumbnail.m in Sources */,
 				9AE072661A520793001A67C8 /* ICCachedImage.m in Sources */,
-				9AE0726B1A5207AB001A67C8 /* ICImageCacherModel.xcdatamodel in Sources */,
+				9AE0726B1A5207AB001A67C8 /* ICImageCacher.xcdatamodel in Sources */,
 				D5286DB780B6DD8E28818F9B /* Pods-ImageCacher-dummy.m in Sources */,
 				9AE072631A520782001A67C8 /* AVAssetTrack+VideoOrientation.m in Sources */,
 				9AE072691A52079A001A67C8 /* ICImageCacher.m in Sources */,
