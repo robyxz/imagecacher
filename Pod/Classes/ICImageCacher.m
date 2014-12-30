@@ -68,7 +68,7 @@ static ICImageCacher    *shared_ICImageCacher;
     self.persistentString       = [NSString stringWithFormat:@"%@.sqlite", @"ICImageCacher"];
     self.persistentURL          = [documentDirectoryURL URLByAppendingPathComponent:self.persistentString];
     
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Qwikword" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"ICImageCacher" withExtension:@"momd"];
     
     self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
