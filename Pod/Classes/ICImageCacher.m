@@ -227,6 +227,9 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
+    if (!imageURL) {
+        handler(nil, ICCacheSourceUndefined);
+    }
     
     // IMAGES HAVE ALSO TO BE FETCHED FROM THE PERSISTENT CACHE
     UIImage *image = self.imagesURLCache[imageURL];
