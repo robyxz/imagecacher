@@ -18,7 +18,7 @@ ImageCacher strategy is straightforward: you ask for an image by specifying its 
 
 The common usage pattern is the following:
 ```objective-c
-    [[ICImageCacher hared] getImageWithURL:<myurl> withCompletionHandler^(UIImage *image ,tICCacheSource source) {
+    [[ICImageCacher shared] getImageWithURL:<myurl> withCompletionHandler^(UIImage *image ,tICCacheSource source) {
         switch (source) {
         case ICCacheSourceMemory:
             // image has been found into memory, this block is called WITHIN getImageWithURL execution
@@ -39,6 +39,10 @@ The common usage pattern is the following:
         }
     }];
 ```
+
+## Details
+
+
 
 ## Requirements
 

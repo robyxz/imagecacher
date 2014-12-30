@@ -56,6 +56,11 @@ static ICImageCacher    *shared_ICImageCacher;
         self.callbacksForImageCaching   = [NSMutableDictionary dictionary];
         self.lastAccessedURLs           = [NSMutableArray array];
         
+        // register for application did enter background event and save
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationDidEnterBackground:)
+                                                     name:UIApplicationDidEnterBackgroundNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -134,7 +139,7 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(void)dealloc {
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Coredata background fetching
@@ -220,8 +225,6 @@ static ICImageCacher    *shared_ICImageCacher;
     for (NSManagedObject *obj in result) {
         [self.managedObjectContext deleteObject:obj];
     }
-    
-    [self saveContext];
     
     [self.imagesURLCache removeAllObjects];
 }
@@ -411,8 +414,6 @@ static ICImageCacher    *shared_ICImageCacher;
     cachedImage.imageURL = imageURL;
     cachedImage.image = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
     
-    [self saveContext];
-    
     return YES;
 }
 
@@ -432,9 +433,13 @@ static ICImageCacher    *shared_ICImageCacher;
         for (id entity in result) {
             [self.managedObjectContext deleteObject:entity];
         }
-        
-        [self saveContext];
     }
+}
+
+#pragma mark - Notifications
+
+-(void)applicationDidEnterBackground:(NSNotification *)notification {
+    [self saveContext];
 }
 
 @end
