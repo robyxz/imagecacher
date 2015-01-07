@@ -230,7 +230,7 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
-    if (!imageURL) {
+if (!imageURL || ![imageURL isKindOfClass:[NSString class]] || imageURL.length == 0) {
         handler(nil, ICCacheSourceUndefined);
     }
     
