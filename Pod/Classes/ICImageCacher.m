@@ -230,8 +230,15 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
-if (!imageURL || ![imageURL isKindOfClass:[NSString class]] || imageURL.length == 0) {
+    if (!imageURL || ![imageURL isKindOfClass:[NSString class]]) {
         handler(nil, ICCacheSourceUndefined);
+        return;
+    }
+    
+    // imageURL is a string, check if is an empty string
+    if (imageURL.length == 0) {
+        handler(nil, ICCacheSourceUndefined);
+        return;
     }
     
     // IMAGES HAVE ALSO TO BE FETCHED FROM THE PERSISTENT CACHE
