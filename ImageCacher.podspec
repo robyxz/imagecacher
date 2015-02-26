@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ImageCacher"
-  s.version          = "0.1.3"
+  s.version          = "0.1.4"
   s.summary          = "ImageCacher helps you to manage image caching."
   s.description      = <<-DESC
                         The image caching is asynchronous and based on blocks and GCD. The persistent storage is based on CoreData, fetches are executed in background, last accessed images are stored into a memory buffer.

@@ -410,6 +410,9 @@ static ICImageCacher    *shared_ICImageCacher;
     if (result.count > 1) {
         return false;
     } else {
+        
+        self.imagesURLCache[imageURL] = image;
+        
         if (result.count == 1) {
             cachedImage = result[0];
         } else {
