@@ -11,8 +11,16 @@
 
 #import "AVAsset+Thumbnail.h"
 #import "AVAssetTrack+VideoOrientation.h"
+#import <libkern/OSAtomic.h>
 
 #define MAX_CACHED_IMAGES   50
+
+
+#define LOCK    OSSpinLockLock(&_lock)
+#define UNLOCK  OSSpinLockUnlock(&_lock)
+#define LOCKED(...) OSSpinLockLock(&_lock); \
+__VA_ARGS__; \
+OSSpinLockUnlock(&_lock);
 
 static ICImageCacher    *shared_ICImageCacher;
 
@@ -30,6 +38,9 @@ static ICImageCacher    *shared_ICImageCacher;
 @property (nonatomic, strong) NSMutableDictionary   *imagesURLCache;
 @property (nonatomic, strong) NSMutableDictionary   *callbacksForImageCaching;
 @property (nonatomic, strong) NSMutableArray        *lastAccessedURLs;
+
+// Thread-Safe strategy vars
+@property OSSpinLock lock;
 
 @end
 
@@ -188,6 +199,7 @@ static ICImageCacher    *shared_ICImageCacher;
 #pragma mark - Image caching
 
 -(void)updateLastAccessedURLs:(NSString *)imageURL {
+
     // find the url index
     NSArray *elements = [self.lastAccessedURLs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF == '%@'", imageURL]];
     if (elements.count == 1) {
@@ -225,11 +237,20 @@ static ICImageCacher    *shared_ICImageCacher;
     for (NSManagedObject *obj in result) {
         [self.managedObjectContext deleteObject:obj];
     }
+    LOCKED( [self.imagesURLCache removeAllObjects]; )
     
-    [self.imagesURLCache removeAllObjects];
 }
 
 -(void)getImageWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
+    
+    // always execute in main thread
+    if ([NSThread mainThread] != [NSThread currentThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self getImageWithURL:imageURL withCompletionHandler:handler];
+        });
+        return;
+    }
+    
     if (!imageURL || ![imageURL isKindOfClass:[NSString class]]) {
         handler(nil, ICCacheSourceUndefined);
         return;
@@ -343,6 +364,15 @@ static ICImageCacher    *shared_ICImageCacher;
 };
 
 -(void)getThumbnailForVideoWithURL:(NSString *)imageURL withCompletionHandler:(DCModel_imageCompletionHandler)handler {
+
+    // always execute in main thread
+    if ([NSThread mainThread] != [NSThread currentThread]) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self getThumbnailForVideoWithURL:imageURL withCompletionHandler:handler];
+        });
+        return;
+    }
+    
     // IMAGES HAVE ALSO TO BE FETCHED FROM THE PERSISTENT CACHE
     UIImage *image = self.imagesURLCache[imageURL];
     if (image) {
@@ -395,6 +425,16 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(BOOL)saveImage:(UIImage *)image withURL:(NSString *)imageURL {
+    
+    // always execute in main thread
+    if ([NSThread mainThread] != [NSThread currentThread]) {
+        __block BOOL retVal;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            retVal = [self saveImage:image withURL:imageURL];
+        });
+        return retVal;
+    }
+    
     // fetch the image from the local cache
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"CachedImage"
                                               inManagedObjectContext:self.managedObjectContext];
@@ -428,6 +468,15 @@ static ICImageCacher    *shared_ICImageCacher;
 }
 
 -(void)deleteImageWithURL:(NSString *)imageURL {
+    
+    // always execute in main thread
+    if ([NSThread mainThread] != [NSThread currentThread]) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self deleteImageWithURL:imageURL];
+        });
+        return;
+    }
+    
     // fetch the image from the local cache
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"CachedImage"
                                               inManagedObjectContext:self.managedObjectContext];
