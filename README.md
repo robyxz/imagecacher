@@ -56,7 +56,7 @@ it, simply add the following line to your Podfile:
 
 ## Author
 
-Roberto Sartori, roberto@rawfish.it
+Roberto Sartori, roberto.sartori@gmail.com
 
 ## License
 
